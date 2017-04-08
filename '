@@ -33,7 +33,7 @@ RSpec.describe WowzaCloud::Stream do
 
     found_stream = WowzaCloud::Stream.get_stream(stream_id, params)
 
-    expect(found_stream.id).to eq(first_stream.id)
+    expect(found_stream).to eq(first_stream)
   end
 
 end
