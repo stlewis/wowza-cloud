@@ -21,7 +21,6 @@ module WowzaCloud
     def self.get_stream(id, parameters = {})
       headers = {'wsc-api-key' => parameters['api_key'], 'wsc-access-key' => parameters['access_key']}
       raw_result = get("/live_streams/#{id}", headers: headers)
-      p raw_result
       return WowzaCloud::Stream.new(raw_result[1].first.merge(parameters))
     end
 
