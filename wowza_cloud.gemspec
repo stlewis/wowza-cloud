@@ -10,13 +10,13 @@ Gem::Specification.new do |spec|
   spec.email         = ["steve@decodingsteve.com"]
 
   spec.summary       = %q{Thin wrapper around the Wowza Cloud API}
-  spec.homepage      = "https://www.github.com/stlewis/wowza-cloud"
+  spec.homepage      = "https://www.github.com/stlewis/wowza_cloud"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'
   # to allow pushing to a single host or delete this section to allow pushing to any host.
   if spec.respond_to?(:metadata)
-    spec.metadata['allowed_push_host'] = "TODO: Set to 'http://mygemserver.com'"
+    spec.metadata['allowed_push_host'] = "https://rubygems.org"
   else
     raise "RubyGems 2.0 or newer is required to protect against " \
       "public gem pushes."
