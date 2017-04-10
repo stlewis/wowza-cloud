@@ -8,25 +8,25 @@ module WowzaCloud
                   :streaming_server, :stream_name, :player_id, :player_embed_code
 
 
-    def self.all(parameters = {})
+    def self.all()
       result = []
-      headers = {'wsc-api-key' => parameters['api_key'], 'wsc-access-key' => parameters['access_key']}
-      raw_result = get('/', headers: headers)
+      headers = {'wsc-api-key' => WowzaCloud.configuration.api_key, 'wsc-access-key' => WowzaCloud.configuration.access_key}
+      raw_result = get('/live_streams', headers: headers)
       raw_result['live_streams'].each do |data|
         result << WowzaCloud::Stream.new(data)
       end
       return result
     end
 
-    def self.get_stream(id, parameters = {})
-      headers = {'wsc-api-key' => parameters['api_key'], 'wsc-access-key' => parameters['access_key']}
-      raw_result = get("/live_streams/#{id}", headers: headers)
-      return WowzaCloud::Stream.new(raw_result[1].first.merge(parameters))
+    def self.get_stream(stream_id)
+      headers    = {'wsc-api-key' => WowzaCloud.configuration.api_key, 'wsc-access-key' => WowzaCloud.configuration.access_key}
+      raw_result = get("/live_streams/#{stream_id}", headers: headers)
+      return WowzaCloud::Stream.new(raw_result[1].first)
     end
 
 
     def initialize(params = {})
-      super(params)
+      super
       params.each do |k, v|
         instance_variable_set(:"@#{k}", v) if self.respond_to?("#{k}=")
       end
@@ -37,6 +37,45 @@ module WowzaCloud
         self.username = conn_params['username']
         self.password = conn_params['password']
       end
+    end
+
+    # Returns the status of the stream. One of starting, stopping, started, stopped, or resetting
+    
+    def destroy
+      raw_response = self.class.delete("/live_streams/#{self.id}", headers: @headers) 
+      return raw_response.code == 204
+    end
+    
+    def status
+      raw_response = self.class.get("/live_streams/#{self.id}/state/", headers: @headers) 
+      return raw_response['live_stream']['state']
+    end
+
+    alias state status
+
+    def stats
+      raw_response = self.class.get("/live_streams/#{self.id}/stats", headers: @headers) 
+      return raw_response['live_stream']
+    end
+
+    def thumbnail
+      raw_response = self.class.get("/live_streams/#{self.id}/thumbnail_url", headers: @headers) 
+      return raw_response['live_stream']['thumbnail_url']
+    end
+
+    def start
+      raw_response = self.class.put("/live_streams/#{self.id}/start", headers: @headers) 
+      return raw_response['live_stream']['state']
+    end
+
+    def reset
+      raw_response = self.class.put("/live_streams/#{self.id}/reset", headers: @headers) 
+      return raw_response['live_stream']['state']
+    end
+
+    def stop
+      raw_response = self.class.put("/live_streams/#{self.id}/stop", headers: @headers) 
+      return raw_response['live_stream']['state']
     end
   
   end

@@ -9,6 +9,13 @@ require "wowza_cloud"
 # (If you use this, don't forget to add pry to your Gemfile!)
 # require "pry"
 # Pry.start
+#
+WowzaCloud.configure do |config|
+  yaml_path         = File.dirname(__FILE__) + '/../credentials.yml'
+  hsh               = YAML.load(File.read(yaml_path))
+  config.api_key    = hsh['api_key']
+  config.access_key = hsh['access_key']
+end
 
 require "irb"
 IRB.start(__FILE__)
