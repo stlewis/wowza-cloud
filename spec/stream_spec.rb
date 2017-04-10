@@ -45,12 +45,12 @@ RSpec.describe WowzaCloud::Stream do
     expect(status).to eq('started')
   end
 
-  it "can delete a stream" do
-    expect(WowzaCloud::Stream).to receive(:get).and_return(mock_stream_list.first)
-    mock_delete = double(HTTParty::Response, {code: 204})
-    expect(WowzaCloud::Stream).to receive(:delete).and_return(mock_delete)
-    stream   = WowzaCloud::Stream.get_stream('cktvgy4p')
-    stream.destroy
-  end
+  #it "can delete a stream" do
+    #expect(WowzaCloud::Stream).to receive(:get).and_return(mock_stream_list.first)
+    #mock_delete = double(HTTParty::Response, {code: 204})
+    #expect(WowzaCloud::Stream).to receive(:delete).and_return(mock_delete)
+    #stream   = WowzaCloud::Stream.get_stream('cktvgy4p')
+    #stream.destroy
+  #end
 
 end

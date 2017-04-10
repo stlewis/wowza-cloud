@@ -39,12 +39,10 @@ module WowzaCloud
       end
     end
 
-    # Returns the status of the stream. One of starting, stopping, started, stopped, or resetting
-    
-    def destroy
-      raw_response = self.class.delete("/live_streams/#{self.id}", headers: @headers) 
-      return raw_response.code == 204
-    end
+    #def destroy
+      #raw_response = self.class.delete("/live_streams/#{self.id}", headers: @headers) 
+      #return raw_response.code == 204
+    #end
     
     def status
       raw_response = self.class.get("/live_streams/#{self.id}/state/", headers: @headers) 
