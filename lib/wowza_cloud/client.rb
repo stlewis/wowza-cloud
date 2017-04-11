@@ -4,7 +4,7 @@ module WowzaCloud
   class Client
     include HTTParty
 
-    base_uri 'https://api-sandbox.cloud.wowza.com/api/v1' 
+    base_uri 'https://api.cloud.wowza.com/api/v1' 
     attr_reader :headers
 
     def initialize(params = {})
