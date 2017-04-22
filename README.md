@@ -5,10 +5,12 @@ API]('https://sandbox.cloud.wowza.com/apidocs/v1/'). The quickest way to get
 started with this library would be to glance over the Wowza documentation, then
 come back here and take a look at some of the examples below.
 
-Thus far, this only covers the live streams portion of the API, and is missing
-delete, create and update from that section. I'm planning on adding more
-functionality as I need it, but feel free to add a pull request if there's
-something missing here that you'd like to see.
+As it stands right now, I've only implemented the endpoints that I have an
+active need for. That means that the feature of the API that _you're_ looking
+for may not be here. If that's the case, you've got two options. First, you
+could try shooting me a message and asking me to build the feature in. If I've
+got time, I'll take care of it for you. Alternatively, I'm all for accepting
+pull requests, so feel free to add the feature for yourself.
 
 ## Installation
 
@@ -49,6 +51,7 @@ end
 For non-Rails users, some variation of the above called somewhere before you
 start using the gem should do.
 
+
 ### Getting a list of streams
 
 One of the more basic things you'll want to do is to get a list of all of your
@@ -77,6 +80,19 @@ manipulate that particular stream.
 
 The gem gives you a number of basic actions you can take for a particular
 stream.
+
+### Accessing basic attributes
+
+All of the return values for a call to `/live_streams/{id}` are made available as
+attributes on the `WowzaCloud::Stream` object. So, for instance, if you want to
+get the broadcast location for a given stream, you can call:
+
+```ruby
+stream.broadcast_location # => "us_west_california"
+```
+
+This will get you back the string value that corresponds to that attribute from
+the API. This works for all of the keys in the return JSON from the API call.
 
 #### Checking Stream Status
 
@@ -115,10 +131,96 @@ stream = WowzaCloud::Stream.get_stream('vxy4nprl')
 stream.start # => 'starting'
 # Reset a stream
 stream.reset # => 'resetting'
-# Stop a stream
-stream.stop # => 'stopping'
+# Stop a stream 
+stream.stop # => 'stopping' 
 ```
 
+### Working With Schedules
+
+Once again, I'd encourage you to refer to the official Wowza API documentation
+for details about the schedule API. As of this writing, this gem only supports
+retrieving schedule details and enabling or disabling schedules. Editing,
+adding and removing are all unsupported at the moment, so you'll still have to
+do that through the Wowza Cloud interface.
+
+In any case, you can retrieve and work with schedules in  much the same way
+that you work with streams:
+
+#### Getting a list of schedules
+
+You can get a complete list of all your configured schedules like this:
+
+```ruby
+schedules = WowzaCloud::Schedule.all
+```
+
+This will return an array of `WowzaCloud::Schedule` instances. 
+
+### Accessing basic attributes
+
+All of the return values for a call to `/schedules/{id}` are made available as
+attributes on the `WowzaCloud::Schedule` object. So, for instance, if you want
+to get the list of days the schedule runs for, you can call:
+
+```ruby
+schedule.recurrence_data # => "sunday,monday,tuesday,wednesday,thursday,friday,saturday"
+```
+
+This will get you back the string value that corresponds to that attribute from
+the API. This works for all of the keys in the return JSON from the API call.
+
+### Fetching a single schedule
+
+Once you have the ID of the schedule you'd like to retrieve, you can fetch it's
+data with the following:
+
+```ruby
+schedule = WowzaCloud::Schedule.get_schedule('myscheduleid')
+```
+
+This will return an instance of `WowzaCloud::Schedule` that you can then work
+with as detailed below.
+
+### Enabling a schedule
+
+You can enable a particular schedule by calling the `enable` method:
+
+```ruby
+schedule.enable # => 'enabled'
+```
+
+The return value of the enable call is the current status of the stream,
+(should be "enabled").
+
+### Disabling a schedule
+
+Conversely, if you want to disable a schedule:
+
+```ruby
+schedule.disable # => 'disabled'
+```
+
+The return value is the same as for enabling -- the current status of the
+schedule.
+
+### Getting schedule status
+
+If you want to know whether a schedule is enabled or disabled, you can find out
+by calling the `status` instance method:
+
+```ruby
+schedule.status # => 'enabled'
+```
+
+### Fetching corresponding streams and schedules
+
+Instances of `WowzaCloud::Stream` have a convenience method `schedule` that
+will return `nil` if the Stream does not have an associated schedule, but an
+appropriate instance of `WowzaCloud::Schedule` if a schedule does exist.
+
+Similarly, instances of `WowzaCloud::Schedule` have a convenience method
+`stream`, which will always return the appropriate instance of
+a `WowzaCloud::Stream`.
 
 ## Development
 
