@@ -30,11 +30,11 @@ module WowzaCloud
     end
 
     def start_time
-      Time.parse(@start_transcoder).strftime("%H:%M:%S")
+      Time.parse(Time.parse(@start_transcoder).strftime("%H:%M:%S"))
     end
 
     def end_time
-      Time.parse(@stop_transcoder).strftime("%H:%M:%S")
+      Time.parse(Time.parse(@stop_transcoder).strftime("%H:%M:%S"))
     end
 
     def status
