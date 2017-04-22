@@ -1,6 +1,7 @@
 require "wowza_cloud/version"
 require "wowza_cloud/client"
 require "wowza_cloud/stream"
+require "wowza_cloud/schedule"
 
 module WowzaCloud
   class << self
