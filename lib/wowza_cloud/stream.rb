@@ -78,7 +78,7 @@ module WowzaCloud
 
     # Returns the first active schedule attached to this stream, if one exists
     def schedule
-      Schedule.all.select{|s| s.transcoder_id == @id s.state == 'enabled' }.first
+      Schedule.all.select{|s| s.transcoder_id == @id && s.state == 'enabled' }.first
     end
 
     def schedules
