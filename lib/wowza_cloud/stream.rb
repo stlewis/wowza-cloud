@@ -76,9 +76,13 @@ module WowzaCloud
       return raw_response['live_stream']['state']
     end
 
-    # Returns the schedule attached to this stream, if one exists
+    # Returns the first active schedule attached to this stream, if one exists
     def schedule
-      Schedule.all.select{|s| s.transcoder_id == @id }.first
+      Schedule.all.select{|s| s.transcoder_id == @id s.state == 'enabled' }.first
+    end
+
+    def schedules
+      Schedule.all.select{|s| s.transcoder_id == @id } 
     end
   
   end
